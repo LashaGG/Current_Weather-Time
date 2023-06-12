@@ -16,7 +16,7 @@ function getFlagEmoji(countryCode) {
 
 const weatherIcons = {
     Thunderstorm: 'https://cdn-icons-png.flaticon.com/512/3104/3104612.png',
-    Drizzle: 'http://openweathermap.org/img/wn/09d@2x.png',
+    Drizzle: 'https://openweathermap.org/img/wn/09d@2x.png',
     Rain: 'https://cdn-icons-png.flaticon.com/512/4150/4150897.png',
     Snow: 'https://cdn-icons-png.flaticon.com/512/3706/3706415.png',
     Mist: 'http://openweathermap.org/img/wn/50d@2x.png',
@@ -56,7 +56,7 @@ async function getTime(city) {
 
     for (const region of regions) {
         try {
-            const response = await fetch(`http://worldtimeapi.org/api/timezone/${region}/${formattedCity}`);
+            const response = await fetch(`https://worldtimeapi.org/api/timezone/${region}/${formattedCity}`);
             const data = await response.json();
             document.getElementById("local-time").textContent = convertToTime(data.datetime);
             break;
