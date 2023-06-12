@@ -14,7 +14,15 @@ function getFlagEmoji(countryCode) {
     return String.fromCodePoint(...codePoints);
 }
 
-
+const weatherIcons = {
+    Thunderstorm: 'https://cdn-icons-png.flaticon.com/512/3104/3104612.png',
+    Drizzle: 'http://openweathermap.org/img/wn/09d@2x.png',
+    Rain: 'https://cdn-icons-png.flaticon.com/512/4150/4150897.png',
+    Snow: 'https://cdn-icons-png.flaticon.com/512/3706/3706415.png',
+    Mist: 'http://openweathermap.org/img/wn/50d@2x.png',
+    Clouds: 'https://cdn-icons-png.flaticon.com/512/252/252035.png',
+    Clear: 'https://cdn-icons-png.flaticon.com/512/2698/2698240.png'
+};
 async function getData(city) {
     try {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=98d20e075bd2816366af4312ebe4d1e9&units=metric`);
@@ -31,32 +39,10 @@ async function getData(city) {
         document.getElementById("main").style.boxShadow = `0 2px 4px ${color}`;
 
 
-         let picture= document.getElementById("image");
-        switch (document.getElementById("description").textContent = data.weather[0].main) {
-            case 'Thunderstorm':
-                picture.setAttribute('src', 'http://openweathermap.org/img/wn/11d@2x.png');
-                break;
-            case 'Drizzle':
-                picture.setAttribute('src', 'http://openweathermap.org/img/wn/09d@2x.png');
-                break;
-            case 'Rain':
-                picture.setAttribute('src', 'http://openweathermap.org/img/wn/09d@2x.png');
-                break;
-            case 'Snow':
-                picture.setAttribute('src', 'http://openweathermap.org/img/wn/13d@2x.png');
-                break;
-            case 'Mist':
-                picture.setAttribute('src', 'http://openweathermap.org/img/wn/50d@2x.png');
-                break;
-            case 'Clouds':
-                picture.setAttribute('src', 'https://cdn-icons-png.flaticon.com/512/252/252035.png');
-                break;
-            case 'Clear':
-                picture.setAttribute('src', 'https://cdn-icons-png.flaticon.com/512/2698/2698240.png');
-                break;
-        }
-
-
+        let picture = document.getElementById("image");
+        let weather = data.weather[0].main;
+        document.getElementById("description").textContent = weather;
+        picture.setAttribute('src', weatherIcons[weather]);
 
 
     } catch (error) {
