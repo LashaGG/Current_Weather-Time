@@ -67,6 +67,10 @@ button:hover {
 #weather-info {
     text-align: center;
 }
+#image{
+    width: 24%;
+    height: auto;
+}
 
 @media (max-width: 980px) {
     main {
