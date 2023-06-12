@@ -1,10 +1,5 @@
-document.addEventListener("keydown", event => {
-    if (event.keyCode === 13) {
-        start();
-    }
-});
+ALLdata = {}
 
-document.getElementById("button").addEventListener("click", start);
 
 function getFlagEmoji(countryCode) {
     const codePoints = countryCode
@@ -14,66 +9,44 @@ function getFlagEmoji(countryCode) {
     return String.fromCodePoint(...codePoints);
 }
 
-const weatherIcons = {
-    Thunderstorm: 'https://cdn-icons-png.flaticon.com/512/3104/3104612.png',
-    Drizzle: 'http://openweathermap.org/img/wn/09d@2x.png',
-    Rain: 'https://cdn-icons-png.flaticon.com/512/4150/4150897.png',
-    Snow: 'https://cdn-icons-png.flaticon.com/512/3706/3706415.png',
-    Mist: 'http://openweathermap.org/img/wn/50d@2x.png',
-    Clouds: 'https://cdn-icons-png.flaticon.com/512/252/252035.png',
-    Clear: 'https://cdn-icons-png.flaticon.com/512/2698/2698240.png'
-};
-async function getData(city) {
-    try {
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=98d20e075bd2816366af4312ebe4d1e9&units=metric`);
-        const data = await response.json();
-        const temp = data.main.temp;
+function getdata(city) {
 
-        document.getElementById("temperature").textContent = temp + "°C";
-        document.getElementById("description").textContent = data.weather[0].description;
-        document.getElementById("city-name").textContent = data.name + " " + getFlagEmoji(data.sys.country);
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q= ${city} &appid=98d20e075bd2816366af4312ebe4d1e9&units=metric`)
+        .then(response => response.json())
+        .then(data => {
+            const temp = data.main.temp;
 
-        const color = temp < 20 ? "#3a78c2" : "#ff8100";
-        document.getElementById("header").style.backgroundColor = color;
-        document.getElementById("button").style.backgroundColor = color;
-        document.getElementById("main").style.boxShadow = `0 2px 4px ${color}`;
+            let color = "#ff8100";
+            if (temp < 20) color = "#3a78c2";
+
+            document.getElementById("header").style.backgroundColor = color;
+            document.getElementById("button").style.backgroundColor = color;
 
 
-        let picture = document.getElementById("image");
-        let weather = data.weather[0].main;
-        document.getElementById("description").textContent = weather;
-        picture.setAttribute('src', weatherIcons[weather]);
+            document.getElementById("temperature").textContent = temp + "°C";
+            document.getElementById("description").textContent = data.weather[0].description;
+            document.getElementById("city-name").textContent = data.name + " " + getFlagEmoji(data.sys.country);
+
+        })
+        .catch(error => {
+            alert("city not found");
+        });
+
+}
 
 
-    } catch (error) {
-        alert("city not found");
+document.addEventListener("keydown", function (event) {
+    if (event.keyCode === 13) {
+        start();
     }
-}
+});
 
-async function getTime(city) {
-    const regions = ["Europe", "Asia", "America", "Africa", "Antarctica", "Atlantic", "Australia", "Pacific"];
-    const formattedCity = city.replace(/ /g, "_");
+document.getElementById("button").addEventListener("click", function () {
+    start();
+});
 
-    for (const region of regions) {
-        try {
-            const response = await fetch(`http://worldtimeapi.org/api/timezone/${region}/${formattedCity}`);
-            const data = await response.json();
-            document.getElementById("local-time").textContent = convertToTime(data.datetime);
-            break;
-        } catch (error) {
-            document.getElementById("local-time").textContent = "No Time Data";
-        }
-    }
-}
-
-function convertToTime(dateString) {
-    const [datePart, timePart] = dateString.split("T");
-    const [hour, minute] = timePart.split(":");
-    return `${hour}:${minute}`;
-}
 
 function start() {
     const city = document.getElementById("city").value;
-    getData(city);
-    getTime(city);
+    getdata(city);
 }
